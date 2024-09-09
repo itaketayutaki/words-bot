@@ -57,7 +57,7 @@ export const updateRefreshToken = async (character: Character, state: string, co
 
 export const tweet = async (character: Character, text: string) => {
     const accessToken = await fetchAccessTokens(character, character.refreshToken ?? '')
-    await fetch('https://api.twitter.com/2/tweets', {
+    const res = await fetch('https://api.twitter.com/2/tweets', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -67,6 +67,9 @@ export const tweet = async (character: Character, text: string) => {
             text
         }),
     })
+    if (!res.ok) {
+        throw new Error(await res.text());
+    }
 }
 
 /**
